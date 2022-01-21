@@ -1,6 +1,7 @@
 import configparser
 import numpy as np
 import func
+from time import time
 
 # Loading of settings
 config = configparser.ConfigParser()
@@ -27,6 +28,9 @@ VV = np.empty(shape=(T_INT,K_INT))
 # Set the random seed
 np.random.seed(20000)
 
+# Fix the zero time
+t0 = time()
+
 # Compute the price matrix
 CC = func.price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC)
 
@@ -34,6 +38,9 @@ CC = func.price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC)
 for i in range(len(T_array)):
     for j in range(len(K_array)):
         VV[i,j] = func.find_imp_vol(CC[i,j], S=S0, K=K_array[j], T=T_array[i], r=R)
+
+# Total time
+print('All Done! Time: ', round(time()-t0, 2))
 
 # Price Chart
 func.price_chart(KK, TT, CC)

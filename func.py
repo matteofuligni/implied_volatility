@@ -35,6 +35,7 @@ def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
             The CC matrix with all the computed prices
     """
     norm = stats.norm.rvs(size=(N_INTER,N_SIM))
+    print('Normal Generated! Time: ', round(time()-t0, 2))
     r=R; sim=N_SIM; inter=N_INTER;
     for i in range(len(T_array)):
         T = T_array[i]; dt = T/inter; att=np.exp(-r*T)
@@ -48,6 +49,8 @@ def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
                 S = S*(1+r*dt)+np.multiply(V,dw)
             payoff = np.maximum(S-k,0).mean()
             CC[i,g] = payoff*att
+            tnp2 = time() - t0
+            print('Done : C[', i, ']','[',g,']', 'Time: ', round(tnp2,2))
     return CC
 
 
