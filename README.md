@@ -1,12 +1,10 @@
 # Implied Volatility Surface
 
 ## Summary
-Whit this script its possible to generate the implied volatility surface for a defined option with the Euler and Monte Carlo methods.
+With this script its possible to generate the implied volatility surface for a defined option with the Euler and Monte Carlo methods.
 
 The implied volatility is the volatility as if that price obtained of an option was calculated with the Black-Scholes model.
 The implied volatility surface represent one of the best way to evaluate an option in finance.
-
-The script can be easily adapt to particular definition of volatility of the underlying asset, and the parameters can be set at will in the configuration.txt file.
 
 ## Monte Carlo Method
 Monte Carlo Method is a simple technique of numerical approximation of the mean of a random variable X. It is used in many circumstances in mathematica finance and in particular in the pricing problem.
@@ -36,3 +34,10 @@ The general formulation is:
 The algorithm start from an initial guess and proceed until a certain precision or the max number of iterations is reached.
 
 In this project the algorithm return the best estimation for the implied volatility.
+
+## Structure of the project
+These are the steps in order to run the simulation:
+
+1) First, the user has to choose the personal settings that want
+
+The script can be easily adapt to particular definition of volatility of the underlying asset, and the parameters can be set at will in the configuration.txt file.

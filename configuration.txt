@@ -2,6 +2,8 @@
 S0 = 1
 R = 0.05
 VOL = .2
+TIME = 2.0
+STRIKE = 1.5
 t_int = 10
 k_int = 10
 N_SIM = 10000
