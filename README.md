@@ -10,3 +10,7 @@ The implied volatility surface represent one of the best way to evaluate an opti
 ## Euler Method
 
 ## Newton Method
+
+The Newton-Raphson method is a root-finding algorithm which produces successively better approximations to the zeroes of a function.
+The general formulation is:
+x_{n+1} = x_n - x
