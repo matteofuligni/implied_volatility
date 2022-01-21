@@ -15,8 +15,8 @@ def sigma(S, VOL):
 
 def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
     """ This method implement the Monte Carlo and Euler methods to compute
-        the expectation value of all the prices by varying the
-        expiration time and the strike.
+        the expectation value of all the prices of a call option by varying
+        the expiration time and the strike.
 
         Parameters
             T_array : an array with all the possible expiration times
@@ -76,3 +76,26 @@ def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
         sigma = sigma + np.divide(diff,vega)
     print('Sigma not found')
     return sigma
+
+
+    def bs_call(S, K, T, r, vol):
+        """ This method implements the Black-Scholes formula
+            to compute the price of a call option given the strike,
+            the expiration time, the risk-free return and the volatility
+
+            Parameters
+                S : the initial value of the assets
+                K : the strike of the option
+                T : the option expiration time
+                r : the risk-free return
+                vol : the volatility of the asset
+
+            Returns
+                The price of the call option
+        """
+    with np.errstate(divide='ignore', invalid='ignore'):
+        d1 = np.nan_to_num(np.divide((np.log(S/K) + (r + 0.5*vol**2)*T),(vol*np.sqrt(T))))
+        d2 = d1 - vol * np.sqrt(T)
+        out = S * stats.norm.cdf(d1) - np.exp(-r * T) * K * stats.norm.cdf(d2)
+        out = np.where(np.isnan(out), 0.0, out)
+    return out
