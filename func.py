@@ -1,5 +1,7 @@
 import numpy as np
 from scipy import stats
+import matplotlib.pyplot as plt
+from matplotlib import cm
 
 def sigma(S, VOL):
     """ This method compute the value of the volatility in the case

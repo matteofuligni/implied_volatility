@@ -30,33 +30,5 @@ for i in range(len(T_array)):
     for j in range(len(K_array)):
         VV[i,j] = func.find_imp_vol(CC[i,j], S=S0, K=K_array[j], T=T_array[i], r=R)
 
-
-# Price Chart
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-ax.plot_surface(KK, TT, CC, facecolors=cm.jet(CC), lw=0)
-plt.locator_params(axis="x", nbins=5)
-plt.locator_params(axis="y", nbins=5)
-plt.locator_params(axis="z", nbins=5)
-ax.set_xlabel('Strike', fontsize='14')
-ax.set_ylabel('Time', fontsize='14')
-ax.set_zlabel('Price', fontsize='14')
-ax.tick_params(axis='both', which='major', labelsize=10)
-plt.title('Price Chart', fontsize='24')
-plt.savefig('Price.png', dpi = 300)
-plt.show()
-
-# Volatility Chart
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
-ax.plot_surface(KK, TT, VV, facecolors=cm.jet(VV), lw=0)
-plt.locator_params(axis="x", nbins=5)
-plt.locator_params(axis="y", nbins=5)
-plt.locator_params(axis="z", nbins=5)
-ax.set_xlabel('Strike', fontsize='14')
-ax.set_ylabel('Time', fontsize='14')
-ax.set_zlabel('Vol', fontsize='14')
-ax.tick_params(axis='both', which='major', labelsize=10)
-plt.title(' Volatility Chart', fontsize='24')
-plt.savefig('Vol.png', dpi = 300)
-plt.show()
+func.price_chart(KK, TT, CC) # Price Chart
+func.volatility_chart(KK, TT, VV) # Volatility Chart
