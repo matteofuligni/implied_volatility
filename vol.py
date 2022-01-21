@@ -11,20 +11,18 @@ R = float(config.get('settings', 'R'))
 VOL = float(config.get('settings', 'VOL'))
 TIME = float(config.get('settings', 'TIME'))
 STRIKE = float(config.get('settings', 'STRIKE'))
-t_int = int(config.get('settings', 't_int'))
-k_int = int(config.get('settings', 'k_int'))
+T_INT = int(config.get('settings', 'T_INT'))
+K_INT = int(config.get('settings', 'K_INT'))
 N_SIM = int(config.get('settings', 'N_SIM'))
 N_INTER = int(config.get('settings', 'N_INTER'))
 
-T_array = np.linspace(0.5, TIME, t_int)
-K_array = np.linspace(0.5, STRIKE, k_int)
+T_array = np.linspace(0.5, TIME, T_INT)
+K_array = np.linspace(0.5, STRIKE, K_INT)
 
 KK, TT = np.meshgrid(K_array,T_array)
-CC = np.empty(shape=(t_int,k_int))
-VV = np.empty(shape=(t_int,k_int))
+CC = np.empty(shape=(T_INT,K_INT))
+VV = np.empty(shape=(T_INT,K_INT))
 
 np.random.seed(20000)
 
-CC = func.price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC)
-
-print(CC)
+#CC = func.price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC)
