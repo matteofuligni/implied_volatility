@@ -2,6 +2,7 @@ import numpy as np
 from scipy import stats
 import matplotlib.pyplot as plt
 from matplotlib import cm
+from time import time
 
 def sigma(S, VOL):
     """ This method compute the value of the volatility in the case
@@ -34,6 +35,7 @@ def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
         Returns
             The CC matrix with all the computed prices
     """
+    t0 = time()
     norm = stats.norm.rvs(size=(N_INTER,N_SIM))
     print('Normal Generated! Time: ', round(time()-t0, 2))
     r=R; sim=N_SIM; inter=N_INTER;
