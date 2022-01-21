@@ -99,3 +99,25 @@ def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
         out = S * stats.norm.cdf(d1) - np.exp(-r * T) * K * stats.norm.cdf(d2)
         out = np.where(np.isnan(out), 0.0, out)
     return out
+
+
+    def bs_vega(S, K, T, r, sigma):
+        """ This method implements the formula to compute the greek
+            vega, that is the derivative of the Black-Scholes
+            formula with respect to the price, utilized in the find_vol
+            function.
+
+            Parameters
+                S : the initial value of the assets
+                K : the strike of the option
+                T : the option expiration time
+                r : the risk-free return
+                sigma : the volatility of the asset
+
+            Returns
+                The value of the derivative    
+        """
+    with np.errstate(divide='ignore', invalid='ignore'):
+        d1 = np.divide((np.log(S / K) + (r + 0.5 * sigma ** 2) * T),(sigma * np.sqrt(T)))
+        out = S * stats.norm.pdf(d1) * np.sqrt(T)
+    return out
