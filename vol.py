@@ -15,20 +15,27 @@ K_INT = int(config.get('settings', 'K_INT'))
 N_SIM = int(config.get('settings', 'N_SIM'))
 N_INTER = int(config.get('settings', 'N_INTER'))
 
+# Create the array for strike and time
 T_array = np.linspace(0.5, TIME, T_INT)
 K_array = np.linspace(0.5, STRIKE, K_INT)
 
+# Create the meshgrid
 KK, TT = np.meshgrid(K_array,T_array)
 CC = np.empty(shape=(T_INT,K_INT))
 VV = np.empty(shape=(T_INT,K_INT))
 
+# Set the random seed
 np.random.seed(20000)
 
+# Compute the price matrix
 CC = func.price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC)
 
+# Find the implied volatility matrix
 for i in range(len(T_array)):
     for j in range(len(K_array)):
         VV[i,j] = func.find_imp_vol(CC[i,j], S=S0, K=K_array[j], T=T_array[i], r=R)
 
-func.price_chart(KK, TT, CC) # Price Chart
-func.volatility_chart(KK, TT, VV) # Volatility Chart
+# Price Chart
+func.price_chart(KK, TT, CC)
+# Volatility Chart
+func.volatility_chart(KK, TT, VV)
