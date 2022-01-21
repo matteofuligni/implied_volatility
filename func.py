@@ -27,7 +27,7 @@ def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
             S0 : the initial value of the asset
             R : the value of the risk-free return
             VOL : the value of the fixed volatility of the asset
-            CC : the prices matrix with all zeros 
+            CC : the prices matrix with all zeros
 
         Returns
             The CC matrix with all the computed prices
@@ -47,3 +47,32 @@ def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
             payoff = np.maximum(S-k,0).mean()
             CC[i,g] = payoff*att
     return CC
+
+
+    def find_vol(target_value, S, K, T, r, *args):
+        """ This method implements the Newton-Raphson method # to
+            compute the implied volatility for the input price.
+
+            Parameters
+                target_value : the price of which we want to compute
+                               the Black-Scholes volatility
+                S : the initial value of the assets
+                K : the strike of the option
+                T : the option expiration time
+                r : the risk-free return
+
+            Returns
+                The value of the implied volatility for that time and strike
+        """
+    MAX_ITERATIONS = 100000
+    PRECISION = 1.0e-8
+    sigma = 0.3
+    for i in range(0, MAX_ITERATIONS):
+        price = bs_call(S, K, T, r, sigma)
+        vega = bs_vega(S, K, T, r, sigma)
+        diff = target_value - price
+        if (abs(diff) < PRECISION):
+            return sigma
+        sigma = sigma + np.divide(diff,vega)
+    print('Sigma not found')
+    return sigma
