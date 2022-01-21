@@ -49,6 +49,16 @@ These are the steps in order to run the simulation:
      - N_SIM, the number of the simulations of the underlying asset
      - N_INTER, the number in which the time will be divided for the Euler scheme simulation for the asset
 
+2. Then, the user has to launch the vol.py file, that import its parameters from the configuration.txt file.
 
+3. The output of the script are the surface of the generated prices and the implied volatility surface that will be saved as .png in the directory of the script.
+
+
+The project are divided in different blocks:
+- The configuration.txt file contains all the settable parameters for the model
+- The func.py file contains all the defined functions used in the simulations
+- The vol.py file contains the main part of the project in which all the defined function are recalled and in which the simulations are done
 
 The script can be easily adapt to particular definition of volatility of the underlying asset, and the parameters can be set at will in the configuration.txt file.
+
+Here are reported two sample image for the price and implied volatility surfaces.
