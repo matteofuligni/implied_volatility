@@ -10,8 +10,8 @@ def sigma(S, VOL):
 
         Returns
             The value of the volatility """
-    sigma = VOL #np.multiply(.2*np.maximum(1,2-S),S)
-    return sigma
+    vol = VOL #np.multiply(.2*np.maximum(1,2-S),S)
+    return vol
 
 def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
     """ This method implement the Monte Carlo and Euler methods to compute
@@ -66,16 +66,16 @@ def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
         """
     MAX_ITERATIONS = 100000
     PRECISION = 1.0e-8
-    sigma = 0.3
+    _sigma = 0.3
     for i in range(0, MAX_ITERATIONS):
-        price = bs_call(S, K, T, r, sigma)
-        vega = bs_vega(S, K, T, r, sigma)
+        price = bs_call(S, K, T, r, _sigma)
+        vega = bs_vega(S, K, T, r, _sigma)
         diff = target_value - price
         if (abs(diff) < PRECISION):
-            return sigma
-        sigma = sigma + np.divide(diff,vega)
+            return _sigma
+        _sigma = _sigma + np.divide(diff,vega)
     print('Sigma not found')
-    return sigma
+    return _sigma
 
 
     def bs_call(S, K, T, r, vol):
@@ -115,7 +115,7 @@ def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
                 sigma : the volatility of the asset
 
             Returns
-                The value of the derivative    
+                The value of the derivative
         """
     with np.errstate(divide='ignore', invalid='ignore'):
         d1 = np.divide((np.log(S / K) + (r + 0.5 * sigma ** 2) * T),(sigma * np.sqrt(T)))
