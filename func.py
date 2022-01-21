@@ -12,7 +12,7 @@ def sigma(S, VOL):
 
         Returns
             The value of the volatility """
-    vol = VOL #np.multiply(.2*np.maximum(1,2-S),S)
+    vol = VOL # A possible alternative could be: np.multiply(.2*np.maximum(1,2-S),S)
     return vol
 
 def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
