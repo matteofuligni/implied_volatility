@@ -49,7 +49,7 @@ def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
     return CC
 
 
-    def find_vol(target_value, S, K, T, r, *args):
+    def find_vol(target_value, S, K, T, r):
         """ This method implements the Newton-Raphson method # to
             compute the implied volatility for the input price.
 
