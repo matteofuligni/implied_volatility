@@ -39,15 +39,15 @@ In this project the algorithm return the best estimation for the implied volatil
 These are the steps in order to run the simulation:
 
 1. First, the user has to choose the personal settings that want to implement in the model. The possible setting are:
-          - S0, the initial price of the asset
-          - R, the risk-free return
-          - VOL, the volatility of the asset
-          - TIME, the longest time for the simulation of the asset
-          - STRIKE, the biggest value of strike for the simulation of the asset
-          - t_int, the number of intervals of the expiration time
-          - k_int, the number of different strikes in the range  
-          - N_SIM, the number of the simulations of the underlying asset
-          - N_INTER, the number in which the time will be divided for the Euler scheme simulation for the asset
+     - S0, the initial price of the asset
+     - R, the risk-free return
+     - VOL, the volatility of the asset
+     - TIME, the longest time for the simulation of the asset
+     - STRIKE, the biggest value of strike for the simulation of the asset
+     - t_int, the number of intervals of the expiration time
+     - k_int, the number of different strikes in the range  
+     - N_SIM, the number of the simulations of the underlying asset
+     - N_INTER, the number in which the time will be divided for the Euler scheme simulation for the asset
 
 
 
