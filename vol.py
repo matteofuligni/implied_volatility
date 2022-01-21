@@ -22,3 +22,9 @@ K_array = np.linspace(0.5, STRIKE, k_int)
 KK, TT = np.meshgrid(K_array,T_array)
 CC = np.empty(shape=(t_int,k_int))
 VV = np.empty(shape=(t_int,k_int))
+
+np.random.seed(20000)
+
+CC = func.price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC)
+
+print(CC)
