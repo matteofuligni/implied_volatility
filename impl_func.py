@@ -49,20 +49,65 @@ def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
     return CC
 
 
-    def find_vol(target_value, S, K, T, r):
-        """ This method implements the Newton-Raphson method # to
-            compute the implied volatility for the input price.
+def bs_call(S, K, T, r, vol):
+    """ This method implements the Black-Scholes formula
+        to compute the price of a call option given the strike,
+        the expiration time, the risk-free return and the volatility
 
-            Parameters
-                target_value : the price of which we want to compute
-                               the Black-Scholes volatility
-                S : the initial value of the assets
-                K : the strike of the option
-                T : the option expiration time
-                r : the risk-free return
+        Parameters
+            S : the initial value of the assets
+            K : the strike of the option
+            T : the option expiration time
+            r : the risk-free return
+            vol : the volatility of the asset
 
-            Returns
-                The value of the implied volatility for that time and strike
+        Returns
+            The price of the call option
+    """
+    with np.errstate(divide='ignore', invalid='ignore'):
+        d1 = np.nan_to_num(np.divide((np.log(S/K) + (r + 0.5*vol**2)*T),(vol*np.sqrt(T))))
+        d2 = d1 - vol * np.sqrt(T)
+        out = S * stats.norm.cdf(d1) - np.exp(-r * T) * K * stats.norm.cdf(d2)
+        out = np.where(np.isnan(out), 0.0, out)
+    return out
+
+
+def bs_vega(S, K, T, r, sigma):
+    """ This method implements the formula to compute the greek
+        vega, that is the derivative of the Black-Scholes
+        formula with respect to the price, utilized in the find_vol
+        function.
+
+        Parameters
+            S : the initial value of the assets
+            K : the strike of the option
+            T : the option expiration time
+            r : the risk-free return
+            sigma : the volatility of the asset
+
+        Returns
+            The value of the derivative
+    """
+    with np.errstate(divide='ignore', invalid='ignore'):
+        d1 = np.divide((np.log(S / K) + (r + 0.5 * sigma ** 2) * T),(sigma * np.sqrt(T)))
+        out = S * stats.norm.pdf(d1) * np.sqrt(T)
+    return out
+
+
+def find_imp_vol(target_value, S, K, T, r):
+    """ This method implements the Newton-Raphson method # to
+        compute the implied volatility for the input price.
+
+        Parameters
+            target_value : the price of which we want to compute
+                           the Black-Scholes volatility
+            S : the initial value of the assets
+            K : the strike of the option
+            T : the option expiration time
+            r : the risk-free return
+
+        Returns
+            The value of the implied volatility for that time and strike
         """
     MAX_ITERATIONS = 100000
     PRECISION = 1.0e-8
@@ -76,48 +121,3 @@ def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
         _sigma = _sigma + np.divide(diff,vega)
     print('Sigma not found')
     return _sigma
-
-
-    def bs_call(S, K, T, r, vol):
-        """ This method implements the Black-Scholes formula
-            to compute the price of a call option given the strike,
-            the expiration time, the risk-free return and the volatility
-
-            Parameters
-                S : the initial value of the assets
-                K : the strike of the option
-                T : the option expiration time
-                r : the risk-free return
-                vol : the volatility of the asset
-
-            Returns
-                The price of the call option
-        """
-    with np.errstate(divide='ignore', invalid='ignore'):
-        d1 = np.nan_to_num(np.divide((np.log(S/K) + (r + 0.5*vol**2)*T),(vol*np.sqrt(T))))
-        d2 = d1 - vol * np.sqrt(T)
-        out = S * stats.norm.cdf(d1) - np.exp(-r * T) * K * stats.norm.cdf(d2)
-        out = np.where(np.isnan(out), 0.0, out)
-    return out
-
-
-    def bs_vega(S, K, T, r, sigma):
-        """ This method implements the formula to compute the greek
-            vega, that is the derivative of the Black-Scholes
-            formula with respect to the price, utilized in the find_vol
-            function.
-
-            Parameters
-                S : the initial value of the assets
-                K : the strike of the option
-                T : the option expiration time
-                r : the risk-free return
-                sigma : the volatility of the asset
-
-            Returns
-                The value of the derivative
-        """
-    with np.errstate(divide='ignore', invalid='ignore'):
-        d1 = np.divide((np.log(S / K) + (r + 0.5 * sigma ** 2) * T),(sigma * np.sqrt(T)))
-        out = S * stats.norm.pdf(d1) * np.sqrt(T)
-    return out
