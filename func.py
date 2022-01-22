@@ -71,6 +71,7 @@ def bs_call(S, K, T, r, vol):
         Returns
             The price of the call option
     """
+    out = 0
     with np.errstate(divide='ignore', invalid='ignore'):
         d1 = np.nan_to_num(np.divide((np.log(S/K) + (r + 0.5*vol**2)*T),(vol*np.sqrt(T))))
         d2 = d1 - vol * np.sqrt(T)
@@ -95,6 +96,7 @@ def bs_vega(S, K, T, r, sigma):
         Returns
             The value of the derivative
     """
+    out = 0
     with np.errstate(divide='ignore', invalid='ignore'):
         d1 = np.divide((np.log(S / K) + (r + 0.5 * sigma ** 2) * T),(sigma * np.sqrt(T)))
         out = S * stats.norm.pdf(d1) * np.sqrt(T)
