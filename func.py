@@ -104,7 +104,7 @@ def bs_vega(S, K, T, r, sigma):
 
 
 def find_imp_vol(target_value, S, K, T, r):
-    """ This method implements the Newton-Raphson method # to
+    """ This method implements the Newton-Raphson method to
         compute the implied volatility for the input price.
 
         Parameters
@@ -134,6 +134,13 @@ def find_imp_vol(target_value, S, K, T, r):
 
 
 def price_chart(KK, TT, CC):
+    """ This method plot the price chart.
+
+        Parameters
+            KK : the strike meshgrid
+            TT : the time meshgrid
+            CC : the price matrix
+        """
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.plot_surface(KK, TT, CC, facecolors=cm.jet(CC), lw=0)
@@ -149,6 +156,13 @@ def price_chart(KK, TT, CC):
     plt.show()
 
 def volatility_chart(KK, TT, VV):
+    """ This method plot the implied volatility chart.
+
+        Parameters
+            KK : the strike meshgrid
+            TT : the time meshgrid
+            VV : the implied volatility matrix
+        """
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.plot_surface(KK, TT, VV, facecolors=cm.jet(VV), lw=0)
