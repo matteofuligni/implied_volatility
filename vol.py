@@ -22,7 +22,6 @@ K_array = np.linspace(0.5, STRIKE, K_INT)
 
 # Create the meshgrid
 KK, TT = np.meshgrid(K_array,T_array)
-CC = np.empty(shape=(T_INT,K_INT))
 VV = np.empty(shape=(T_INT,K_INT))
 
 # Set the random seed
@@ -32,7 +31,7 @@ np.random.seed(20000)
 t0 = time()
 
 # Compute the price matrix
-CC = func.price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC)
+CC = func.price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL)
 
 # Find the implied volatility matrix
 for i in range(len(T_array)):

@@ -16,7 +16,7 @@ def sigma(S, VOL):
     vol = VOL # A possible alternative could be: np.multiply(.2*np.maximum(1,2-S),S)
     return vol
 
-def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
+def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL):
     """ This method implement the Monte Carlo and Euler methods to compute
         the expectation value of all the prices of a call option by varying
         the expiration time and the strike.
@@ -36,6 +36,7 @@ def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL, CC):
             The CC matrix with all the computed prices
     """
     t0 = time()
+    CC = np.zeros(shape=(len(T_array),len(K_array)))
     norm = stats.norm.rvs(size=(N_INTER,N_SIM))
     print('Normal Generated! Time: ', round(time()-t0, 2))
     r=R; sim=N_SIM; inter=N_INTER;
