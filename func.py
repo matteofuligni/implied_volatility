@@ -53,6 +53,7 @@ def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL):
             CC[i,g] = payoff*att
             tnp2 = time() - t0
             print('Done : C[', i, ']','[',g,']', 'Time: ', round(tnp2,2))
+    print(CC)
     return CC
 
 
