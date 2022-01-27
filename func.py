@@ -77,7 +77,8 @@ def bs_call(S, K, T, r, vol):
         d1 = np.nan_to_num(np.divide((np.log(S/K) + (r + 0.5*vol**2)*T),(vol*np.sqrt(T))))
         d2 = d1 - vol * np.sqrt(T)
         out = S * stats.norm.cdf(d1) - np.exp(-r * T) * K * stats.norm.cdf(d2)
-        out = np.where(np.isnan(out), 0.0, out)
+        if out == np.nan:
+            return 0.0
     return out
 
 
