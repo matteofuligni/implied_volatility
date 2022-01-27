@@ -9,12 +9,12 @@ config.read('configuration.txt')
 S0 = float(config.get('settings', 'S0'))
 R = float(config.get('settings', 'R'))
 VOL = float(config.get('settings', 'VOL'))
-TIME = float(config.get('settings', 'TIME'))
-STRIKE = float(config.get('settings', 'STRIKE'))
-T_INT = int(config.get('settings', 'T_INT'))
-K_INT = int(config.get('settings', 'K_INT'))
-N_SIM = int(config.get('settings', 'N_SIM'))
-N_INTER = int(config.get('settings', 'N_INTER'))
+TIME = 2
+STRIKE = 1.5
+T_INT = 10
+K_INT = 10
+N_SIM = 10000
+N_INTER = 10000
 
 # Create the array for strike and time
 T_array = np.linspace(0.5, TIME, T_INT)
