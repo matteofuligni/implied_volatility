@@ -16,8 +16,8 @@ def test_sigma(S0, VOL):
 
 @given(T_array = st.just(np.linspace(0.5, 2, 10)),
        K_array = st.just(np.linspace(0.5, 1.5, 10)),
-       N_INTER = st.just(10),
-       N_SIM = st.just(10),
+       N_INTER = st.just(10000),
+       N_SIM = st.just(10000),
        S0 = st.just(1),
        R = st.floats(min_value=0.05,max_value=0.99,
                      allow_nan=False, allow_infinity=False),
@@ -71,3 +71,24 @@ def test_bs_vega_01(S, K, T, r, sigma):
 def test_bs_vega_02(S, K, T, r, vol):
     price = f.bs_vega(S, K, T, r, vol)
     assert price == 0.0977200014572636
+
+
+@given(target_value = st.floats(min_value=0.01, allow_nan=False, allow_infinity=False),
+       S = st.floats(min_value=0.01, allow_nan=False, allow_infinity=False),
+       K = st.floats(min_value=0.01, allow_nan=False, allow_infinity=False),
+       T = st.floats(min_value=0.01, allow_nan=False, allow_infinity=False),
+       r = st.floats(min_value=0.01,max_value=0.99,
+                     allow_nan=False, allow_infinity=False))
+def test_imp_vol(target_value, S, K, T, r):
+    vol = f.find_imp_vol(target_value, S, K, T, r)
+    assert type(vol) is np.float64
+
+
+@given(target_value = st.just(0.3),
+       S = st.just(1),
+       K = st.just(1.5),
+       T = st.just(1),
+       r = st.just(0.05))
+def test_find_imp_vol(target_value, S, K, T, r):
+    vol = f.find_imp_vol(target_value, S, K, T, r)
+    assert vol == 1.0569824003509665

@@ -128,7 +128,7 @@ def find_imp_vol(target_value, S, K, T, r):
         vega = bs_vega(S, K, T, r, _sigma)
         diff = target_value - price
         if (abs(diff) < PRECISION):
-            return _sigma
+            return np.float64(_sigma)
         _sigma = _sigma + np.divide(diff,vega)
     print('Sigma not found')
     return _sigma
