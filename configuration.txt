@@ -2,9 +2,3 @@
 S0 = 1
 R = 0.05
 VOL = .2
-TIME = 2.0
-STRIKE = 1.5
-T_INT = 10
-K_INT = 10
-N_SIM = 10000
-N_INTER = 10000
