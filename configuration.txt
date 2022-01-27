@@ -1,4 +1,3 @@
 [settings]
-S0 = 1
 R = 0.05
 VOL = .2

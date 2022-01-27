@@ -30,7 +30,6 @@ def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL):
             S0 : the initial value of the asset
             R : the value of the risk-free return
             VOL : the value of the fixed volatility of the asset
-            CC : the prices matrix with all zeros
 
         Returns
             The CC matrix with all the computed prices

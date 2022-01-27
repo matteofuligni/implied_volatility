@@ -6,9 +6,9 @@ from time import time
 # Loading of settings
 config = configparser.ConfigParser()
 config.read('configuration.txt')
-S0 = float(config.get('settings', 'S0'))
 R = float(config.get('settings', 'R'))
 VOL = float(config.get('settings', 'VOL'))
+S0 = 1
 TIME = 2
 STRIKE = 1.5
 T_INT = 10
