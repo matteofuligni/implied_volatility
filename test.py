@@ -58,6 +58,16 @@ def test_bs_call_02(S, K, T, r, vol):
                      allow_nan=False, allow_infinity=False),
        sigma = st.floats(min_value=0.01,max_value=0.99,
                        allow_nan=False, allow_infinity=False))
-def test_vega(S, K, T, r, sigma):
+def test_bs_vega_01(S, K, T, r, sigma):
     vega = f.bs_vega(S, K, T, r, sigma)
     assert type(vega) is np.float64
+
+
+@given(S = st.just(1),
+       K = st.just(1.5),
+       T = st.just(1),
+       r = st.just(0.05),
+       vol = st.just(0.2))
+def test_bs_vega_02(S, K, T, r, vol):
+    price = f.bs_vega(S, K, T, r, vol)
+    assert price == 0.0977200014572636
