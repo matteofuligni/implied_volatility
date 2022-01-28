@@ -11,7 +11,7 @@ Monte Carlo Method is a simple technique of numerical approximation of the mean 
 
 Generally speaking Monte Carlo Method allows approximating the value of an integral numerically. If Y is uniformly distributed on [0,1] and X = f(Y), then the expectation value of X is
 
-![equation1](https://latex.codecogs.com/gif.latex?E[x]&space;=&space;\int&space;f(x)dx" title="E[x] = \int f(x)dx)
+<img src="https://latex.codecogs.com/png.image?\dpi{110}&space;E[x]&space;=&space;\int&space;f(x)dx" title="E[x] = \int f(x)dx" />
 
 The expectation value of X is the best estimation of the X mean.
 
