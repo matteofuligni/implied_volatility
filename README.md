@@ -22,7 +22,7 @@ This method is used here to numerically approximate a stochastic differential eq
 
 The Euler scheme implemented in the script are represented by the following iterative formula:
 
-St_1 = St_0(1 + rDt)+vol*sqrt(Dt)*Z_1
+<img src="https://latex.codecogs.com/png.image?\dpi{110}&space;St_1&space;=&space;St_0&space;(1&plus;r\Delta&space;t)&plus;\sigma&space;*\sqrt{\Delta&space;t}*Z_1" title="St_1 = St_0 (1+r\Delta t)+\sigma *\sqrt{\Delta t}*Z_1" />
 
 in which vol represent the volatility of the underlying asset and Z is the sample from a normal distribution.
 
