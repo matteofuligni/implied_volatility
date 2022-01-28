@@ -38,20 +38,22 @@ In this project the algorithm return the best estimation for the implied volatil
 ## Structure of the project
 These are the steps in order to run the simulation:
 
-1. First, the user has to choose the personal settings that want to implement in the model. The possible setting are:
-     - S0, the initial price of the asset
+1. First, the user has to choose the personal settings that want to implement in the model through the configuration.txt file. The possible setting are:
      - R, the risk-free return
      - VOL, the volatility of the asset
-     - TIME, the longest time for the simulation of the asset
-     - STRIKE, the biggest value of strike for the simulation of the asset
-     - t_int, the number of intervals of the expiration time
-     - k_int, the number of different strikes in the range  
-     - N_SIM, the number of the simulations of the underlying asset
-     - N_INTER, the number in which the time will be divided for the Euler scheme simulation for the asset
 
-2. Then, the user has to launch the vol.py file, that import its parameters from the configuration.txt file.
+2. There are also other parameters in model that can be defied in some ways "standard", that can be set at will. I suggest to leave them as they are, because are in the optimal way to analyze this type of implied volatility problem. They are:
+     - S0 = 1, the initial price of the asset
+     - TIME = 2, the longest time for the simulation of the asset in years
+     - STRIKE = 1.5, the biggest value of strike for the simulation of the asset
+     - t_int = 10, the number of intervals of the expiration time
+     - k_int = 10, the number of different strikes in the range  
+     - N_SIM = 10000, the number of the simulations of the underlying asset
+     - N_INTER = 10000, the number in which the time will be divided for the Euler scheme simulation for the asset
 
-3. The output of the script are the surface of the generated prices and the implied volatility surface that will be saved as .png in the directory of the script.
+3. Then, the user has to launch the vol.py file, that import its parameters from the configuration.txt file.
+
+4. The output of the script are the surface of the generated prices and the implied volatility surface that will be saved as .png in the directory of the script.
 
 
 The project are divided in different blocks:
@@ -65,5 +67,3 @@ Here are reported two sample image for the price and implied volatility surfaces
 
 ![Price](https://user-images.githubusercontent.com/79851638/150512253-9290aa0c-680a-4824-888c-92f5361bf8e5.png)
 ![Vol](https://user-images.githubusercontent.com/79851638/150512261-33bc6a25-1a81-49e8-8972-0bddfd6177d4.png)
-
-
