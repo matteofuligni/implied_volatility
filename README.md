@@ -53,7 +53,7 @@ In this project the algorithm return the best estimation for the implied volatil
 These are the steps in order to run the simulation:
 
 1. First, the user has to choose the personal settings that want to implement in the model through the configuration.txt file. The possible setting are:
-     - R, the risk-free return (Usually small positive < 0.1)
+     - R, the risk-free return (usually small positive < 0.1)
      - VOL, the volatility of the asset (usually 0 < Vol < 1)
 
 2. There are also other parameters in model that can be defied in some ways "standard", that can be set at will. I suggest to leave them as they are, because are in the optimal way to analyze this type of implied volatility problem. They are:
