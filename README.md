@@ -14,7 +14,7 @@ Generally speaking Monte Carlo Method allows approximating the value of an integ
 https://render.githubusercontent.com/render/math?math=E[x]=\int f(x)dx
 
 
-![formula](https://render.githubusercontent.com/render/math?math=e^{i \pi} = -1)
+![formula](https://render.githubusercontent.com/render/math?math=e^{i\pi}=-1)
 The expectation value of X is the best estimation of the X mean.
 
 This method is used in this project to estimate the prices of an option.
