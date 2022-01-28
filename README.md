@@ -4,6 +4,18 @@
 With this script its possible to generate the implied volatility surface for a defined option with the Euler and Monte Carlo methods.
 
 The implied volatility is the volatility as if that price obtained of an option was calculated with the Black-Scholes model.
+The Black-Scholes formula for a call (that is one of the vanilla option) is the following:
+
+<img src="https://latex.codecogs.com/png.image?\dpi{110}&space;C&space;=&space;S_tN(d_1)&space;-&space;Ke^{-rt}N(d_2)" title="C = S_tN(d_1) - Ke^{-rt}N(d_2)" />
+
+Where:
+
+<img src="https://latex.codecogs.com/png.image?\dpi{110}&space;d_1&space;=&space;\frac{\ln{\frac{S_t}{K}}&plus;(r&plus;\frac{\sigma^2_{\nu}}{2})t}{\sigma_s\sqrt{t}" title="d_1 = \frac{\ln{\frac{S_t}{K}}+(r+\frac{\sigma^2_{\nu}}{2})t}{\sigma_s\sqrt{t}" />
+
+and
+
+<img src="https://latex.codecogs.com/png.image?\dpi{110}&space;d_1&space;=&space;\frac{\ln{\frac{S_t}{K}}&plus;(r&plus;\frac{\sigma^2_{\nu}}{2})t}{\sigma_s\sqrt{t}" title="d_1 = \frac{\ln{\frac{S_t}{K}}+(r+\frac{\sigma^2_{\nu}}{2})t}{\sigma_s\sqrt{t}" />
+
 The implied volatility surface represent one of the best way to evaluate an option in finance.
 
 ## Monte Carlo Method
@@ -30,6 +42,8 @@ in which vol represent the volatility of the underlying asset and Z is the sampl
 
 The Newton-Raphson method is a root-finding algorithm which produces successively better approximations to the zeroes of a function.
 The general formulation is:
+
+<img src="https://latex.codecogs.com/png.image?\dpi{110}&space;x_{n&plus;1}&space;=&space;x_n&space;-\frac{f(x_n)}{f'(x_n)}" title="x_{n+1} = x_n -\frac{f(x_n)}{f'(x_n)}" />
 
 The algorithm start from an initial guess and proceed until a certain precision or the max number of iterations is reached.
 
