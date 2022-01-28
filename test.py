@@ -79,7 +79,7 @@ def test_bs_vega_02(S, K, T, r, vol):
        T = st.floats(min_value=0.01, allow_nan=False, allow_infinity=False),
        r = st.floats(min_value=0.01,max_value=0.99,
                      allow_nan=False, allow_infinity=False))
-def test_imp_vol(target_value, S, K, T, r):
+def test_imp_vol_01(target_value, S, K, T, r):
     vol = f.find_imp_vol(target_value, S, K, T, r)
     assert type(vol) is np.float64
 
@@ -89,6 +89,6 @@ def test_imp_vol(target_value, S, K, T, r):
        K = st.just(1.5),
        T = st.just(1),
        r = st.just(0.05))
-def test_find_imp_vol(target_value, S, K, T, r):
+def test_find_imp_vol_02(target_value, S, K, T, r):
     vol = f.find_imp_vol(target_value, S, K, T, r)
     assert vol == 1.0569824003509665
