@@ -1,7 +1,7 @@
 # Implied Volatility Surface
 
 ## Summary
-With this script its possible to generate the implied volatility surface for a defined option with the Euler and Monte Carlo methods.
+With this script it's possible to generate the implied volatility surface for a defined option with the Euler and Monte Carlo methods.
 
 The implied volatility is the volatility as if that price obtained of an option was calculated with the Black-Scholes model.
 The Black-Scholes formula for a call (that is one of the vanilla option) is the following:
