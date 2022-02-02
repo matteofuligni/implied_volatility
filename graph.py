@@ -1,4 +1,4 @@
-def price_chart(StikesMeshgrid, TimeMeshgrid, PricesMatrix):
+def generatePriceChart(StikesMeshgrid, TimeMeshgrid, PricesMatrix):
     """ This method plot the price chart.
 
         Parameters
@@ -20,7 +20,7 @@ def price_chart(StikesMeshgrid, TimeMeshgrid, PricesMatrix):
     plt.savefig('Price.png', dpi = 300)
     plt.show()
 
-def volatility_chart(StikesMeshgrid, TimeMeshgrid, VolatilityMatrix):
+def generateImpliedVolatilityChart(StikesMeshgrid, TimeMeshgrid, VolatilityMatrix):
     """ This method plot the implied volatility chart.
 
         Parameters
