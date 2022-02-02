@@ -1,6 +1,6 @@
 import numpy as np
 from scipy import stats
-from time import time
+from datetime import datetime
 
 def sigma(AssetPrice, Volatility):
     """ This method compute the value of the volatility in the case
@@ -52,10 +52,10 @@ def generatePricesMatrix(TimesArray, StrikeArray, IntervalsNumber,
     """
 
     S0 = InitialAssetPrice; R = RiskFreeReturn; VOL = Volatility;
-    t0 = time()
+    InitialTime = datetime.now()
     CC = np.zeros(shape=(len(TimesArray),len(StrikeArray)))
     norm = stats.norm.rvs(size=(IntervalsNumber,SimulationNumbers))
-    print('Normal Generated! Time: ', round(time()-t0, 2))
+    print('Normal Generated! Time: ', datetime.now()-InitialTime)
     for i in range(len(TimesArray)):
         T = TimesArray[i]; dt = T/IntervalsNumber; AttualizationFactor=np.exp(-R*T)
         for g in range(len(StrikeArray)):
@@ -68,8 +68,8 @@ def generatePricesMatrix(TimesArray, StrikeArray, IntervalsNumber,
                 S = S*(1+R*dt)+np.multiply(V,dw)
             Payoff = np.maximum(S-k,0).mean()
             CC[i,g] = Payoff*AttualizationFactor
-            tnp2 = time() - t0
-            print('Done : C[', i, ']','[',g,']', 'Time: ', round(tnp2,2))
+            PassedTime = datetime.now() - InitialTime
+            print('Done : C[', i, ']','[',g,']', 'Time: ', PassedTime)
     return CC
 
 
