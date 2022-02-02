@@ -15,7 +15,7 @@ def sigma(AssetPrice, Volatility):
     return volatility
 
 
-def singlePrice(DeltaTime, Strike, IntervalsNumber, SimulationNumbers, InitialAssetPrice,
+def computeSinglePrice(DeltaTime, Strike, IntervalsNumber, SimulationNumbers, InitialAssetPrice,
                 RiskFreeReturn, Volatility, AttualizationFactor, NormalMatrix):
     """
     """
@@ -51,23 +51,16 @@ def generatePricesMatrix(TimesArray, StrikeArray, IntervalsNumber,
             The CC matrix with all the computed prices
     """
 
-    S0 = InitialAssetPrice; R = RiskFreeReturn; VOL = Volatility;
+    S0 = InitialAssetPrice; R = RiskFreeReturn; Vol = Volatility;
     InitialTime = datetime.now()
     CC = np.zeros(shape=(len(TimesArray),len(StrikeArray)))
-    norm = stats.norm.rvs(size=(IntervalsNumber,SimulationNumbers))
+    NormalMatrix = stats.norm.rvs(size=(IntervalsNumber,SimulationNumbers))
     print('Normal Generated! Time: ', datetime.now()-InitialTime)
     for i in range(len(TimesArray)):
-        T = TimesArray[i]; dt = T/IntervalsNumber; AttualizationFactor=np.exp(-R*T)
+        T = TimesArray[i]; DeltaTime = T/IntervalsNumber; AttualizationFactor=np.exp(-R*T)
         for g in range(len(StrikeArray)):
-            k=StrikeArray[g]
-            S = np.empty((SimulationNumbers)); S.fill(S0)
-            V = np.empty((SimulationNumbers)); V.fill(sigma(S0, VOL))
-            for j in range(IntervalsNumber):
-                dw = np.sqrt(dt)*norm[j,:]
-                V = sigma(S, VOL) # The vol can be set as a func of the underlying asset
-                S = S*(1+R*dt)+np.multiply(V,dw)
-            Payoff = np.maximum(S-k,0).mean()
-            CC[i,g] = Payoff*AttualizationFactor
+            CC[i,g] = computeSinglePrice(DeltaTime, StrikeArray[g], IntervalsNumber, SimulationNumbers,
+                                         S0, R, Vol, AttualizationFactor, NormalMatrix)
             PassedTime = datetime.now() - InitialTime
             print('Done : C[', i, ']','[',g,']', 'Time: ', PassedTime)
     return CC
