@@ -1,3 +1,8 @@
 [settings]
-R = 0.05
-VOL = .2
+RiskFreeReturn = 0.05
+Volatility = .2
+SimulationNumbers = 10000
+IntervalsNumber = 10000
+MaxIteration = 10000
+Precision = 1.0e-8
+RandomSeed = 20000
