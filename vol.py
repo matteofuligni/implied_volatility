@@ -1,11 +1,17 @@
 import configparser
 import numpy as np
-import func
-from time import time
+import sys
+import func as f
+import graph as g
+from datetime import datetime as dt
 
 # Loading of settings
 config = configparser.ConfigParser()
-config.read('configuration.txt')
+try:
+    config.read(sys.argv[1])
+except IndexError:
+    print ("You did not specify a correct file! The default file will be loaded")
+    config.read('configuration.txt')
 RiskFreeReturn = float(config.get('settings', 'RiskFreeReturn'))
 Volatility = float(config.get('settings', 'Volatility'))
 SimulationNumbers = int(config.get('settings', 'SimulationNumbers'))
@@ -34,22 +40,22 @@ VolatilityMatrix = np.empty(shape=(TimesArrayIntervals, StrikesArrayIntervals))
 np.random.seed(RandomSeed)
 
 # Fix the zero time
-InitialTime = time()
+InitialTime = dt.now()
 
 # Compute the price matrix
-PricesMatrix = func.generatePricesMatrix(TimesArray, StrikeArray, IntervalsNumber, SimulationNumbers,
+PricesMatrix = f.generatePricesMatrix(TimesArray, StrikeArray, IntervalsNumber, SimulationNumbers,
                                InitialAssetPrice, RiskFreeReturn, Volatility)
 
 # Find the implied volatility matrix
 for i in range(len(TimesArray)):
     for j in range(len(StrikeArray)):
-        VolatilityMatrix[i,j] = func.findImpliedVolatility(PricesMatrix[i,j], InitialAssetPrice, StrikeArray[j],
+        VolatilityMatrix[i,j] = f.findImpliedVolatility(PricesMatrix[i,j], InitialAssetPrice, StrikeArray[j],
                                                            TimesArray[i], RiskFreeReturn, MaxIteration, Precision)
 
 # Total time
-print('All Done! Time: ', round(time()-InitialTime, 2))
+print('All Done! Time: ', dt.now()-InitialTime)
 
 # Price Chart
-func.price_chart(StrikesMeshgrid, TimesMeshgrid, PricesMatrix)
+g.generatePriceChart(StrikesMeshgrid, TimesMeshgrid, PricesMatrix)
 # Volatility Chart
-func.volatility_chart(StrikesMeshgrid, TimesMeshgrid, VolatilityMatrix)
+g.generateImpliedVolatilityChart(StrikesMeshgrid, TimesMeshgrid, VolatilityMatrix)
