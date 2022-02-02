@@ -8,7 +8,7 @@ def price_chart(StikesMeshgrid, TimeMeshgrid, PricesMatrix):
         """
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.plot_surface(StikesMeshgrid, TimeMeshgrid, PricesMatrix, facecolors=cm.jet(CC), lw=0)
+    ax.plot_surface(StikesMeshgrid, TimeMeshgrid, PricesMatrix, facecolors=cm.jet(PricesMatrix), lw=0)
     plt.locator_params(axis="x", nbins=5)
     plt.locator_params(axis="y", nbins=5)
     plt.locator_params(axis="z", nbins=5)
@@ -30,7 +30,7 @@ def volatility_chart(StikesMeshgrid, TimeMeshgrid, VolatilityMatrix):
         """
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
-    ax.plot_surface(StikesMeshgrid, TimeMeshgrid, VolatilityMatrix, facecolors=cm.jet(VV), lw=0)
+    ax.plot_surface(StikesMeshgrid, TimeMeshgrid, VolatilityMatrix, facecolors=cm.jet(VolatilityMatrix), lw=0)
     plt.locator_params(axis="x", nbins=5)
     plt.locator_params(axis="y", nbins=5)
     plt.locator_params(axis="z", nbins=5)
