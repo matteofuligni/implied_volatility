@@ -16,7 +16,24 @@ def sigma(AssetPrice, Volatility):
     volatility = Volatility # A possible alternative could be: np.multiply(.2*np.maximum(1,2-S),S)
     return volatility
 
-def pricesMatrix(TimesArray, StrikeArray, IntervalsNumber,
+
+def singlePrice(DeltaTime, Strike, IntervalsNumber, SimulationNumbers, InitialAssetPrice,
+                RiskFreeReturn, Volatility, AttualizationFactor, NormalMatrix):
+    """
+    """
+
+
+    S0 = InitialAssetPrice; R = RiskFreeReturn; VOL = Volatility
+    S = np.empty((SimulationNumbers)); S.fill(S0)
+    V = V = np.empty((SimulationNumbers)); V.fill(sigma(S0, VOL))
+    for j in range(IntervalsNumber):
+        dw = np.sqrt(DeltaTime)*NormalMatrix[j,:]
+        V = sigma(S, VOL)
+        S = S*(1+R*DeltaTime)+np.multiply(V,dw)
+        Payoff = np.maximum(S-Strike,0).mean()
+    return Payoff*AttualizationFactor
+
+def generatePricesMatrix(TimesArray, StrikeArray, IntervalsNumber,
           SimulationNumbers, InitialAssetPrice, RiskFreeReturn, Volatility):
     """ This method implement the Monte Carlo and Euler methods to compute
         the expectation value of all the prices of a call option by varying
@@ -41,17 +58,16 @@ def pricesMatrix(TimesArray, StrikeArray, IntervalsNumber,
     CC = np.zeros(shape=(len(TimesArray),len(StrikeArray)))
     norm = stats.norm.rvs(size=(IntervalsNumber,SimulationNumbers))
     print('Normal Generated! Time: ', round(time()-t0, 2))
-    r=R; sim=N_SIM; inter=N_INTER;
     for i in range(len(TimesArray)):
-        T = T_array[i]; dt = T/IntervalsNumber; AttualizationFactor=np.exp(-r*T)
+        T = TimesArray[i]; dt = T/IntervalsNumber; AttualizationFactor=np.exp(-R*T)
         for g in range(len(StrikeArray)):
-            k=K_array[g]
+            k=StrikeArray[g]
             S = np.empty((SimulationNumbers)); S.fill(S0)
             V = np.empty((SimulationNumbers)); V.fill(sigma(S0, VOL))
             for j in range(IntervalsNumber):
                 dw = np.sqrt(dt)*norm[j,:]
                 V = sigma(S, VOL) # The vol can be set as a func of the underlying asset
-                S = S*(1+r*dt)+np.multiply(V,dw)
+                S = S*(1+R*dt)+np.multiply(V,dw)
             Payoff = np.maximum(S-k,0).mean()
             CC[i,g] = Payoff*AttualizationFactor
             tnp2 = time() - t0
@@ -80,7 +96,7 @@ def blackScholesCallPrice(InitialAssetPrice, Strike, Time, RiskFreeReturn, Volat
         d1 = np.nan_to_num(np.divide((np.log(S0/Strike) + (R + 0.5*V**2)*Time),(V*np.sqrt(Time))))
         d2 = d1 - V * np.sqrt(Time)
         CallPrice = S0 * stats.norm.cdf(d1) - np.exp(-R * Time) * Strike * stats.norm.cdf(d2)
-        if out == np.nan:
+        if CallPrice == np.nan:
             return 0.0
     return CallPrice
 
@@ -109,7 +125,7 @@ def blackScholesVegaGreek(InitialAssetPrice, Strike, Time, RiskFreeReturn, Volat
     return VegaGreek
 
 
-def findImpliedVolatility(TargetValue, InitialAssetPrice, Strike, Time, RiskFreeReturn):
+def findImpliedVolatility(TargetValue, InitialAssetPrice, Strike, Time, RiskFreeReturn, MaxIteration, Precision):
     """ This method implements the Newton-Raphson method to
         compute the implied volatility for the input price.
 
@@ -125,14 +141,12 @@ def findImpliedVolatility(TargetValue, InitialAssetPrice, Strike, Time, RiskFree
             The value of the implied volatility for that time and strike
         """
     S0 = InitialAssetPrice; R = RiskFreeReturn
-    MAX_ITERATIONS = 100000
-    PRECISION = 1.0e-8
     ImpliedVolatility = 0.3
-    for i in range(0, MAX_ITERATIONS):
+    for i in range(0, MaxIteration):
         CallPrice = blackScholesCallPrice(S0, Strike, Time, R, ImpliedVolatility)
         VegaGreek = blackScholesVegaGreek(S0, Strike, Time, R, ImpliedVolatility)
         Difference = TargetValue - CallPrice
-        if (abs(Difference) < PRECISION):
+        if (abs(Difference) < Precision):
             return np.float64(ImpliedVolatility)
         ImpliedVolatility = ImpliedVolatility + np.divide(Difference,VegaGreek)
 
