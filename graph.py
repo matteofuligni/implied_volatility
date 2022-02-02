@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+from matplotlib import cm
+
 def generatePriceChart(StikesMeshgrid, TimeMeshgrid, PricesMatrix):
     """ This method plot the price chart.
 
