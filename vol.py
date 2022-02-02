@@ -6,42 +6,46 @@ from time import time
 # Loading of settings
 config = configparser.ConfigParser()
 config.read('configuration.txt')
-R = float(config.get('settings', 'R'))
-VOL = float(config.get('settings', 'VOL'))
-S0 = 1
-TIME = 2
-STRIKE = 1.5
-T_INT = 10
-K_INT = 10
-N_SIM = 10000
-N_INTER = 10000
+RiskFreeReturn = float(config.get('settings', 'R'))
+Volatility = float(config.get('settings', 'Volatility'))
+InitialAssetPrice = 1
+MaxTime = 2
+MaxStrike = 1.5
+TimesArrayIntervals = 10
+StrikesArrayIntervals = 10
+SimulationNumbers = 10000
+IntervalsNumber = 10000
+MaxIteration = 10000
+Precision = 1.0e-8
 
 # Create the array for strike and time
-T_array = np.linspace(0.5, TIME, T_INT)
-K_array = np.linspace(0.5, STRIKE, K_INT)
+TimesArray = np.linspace(0.5, MaxTime, TimesArrayIntervals)
+StrikeArray = np.linspace(0.5, MaxStrike, StrikesArrayIntervals)
 
 # Create the meshgrid
-KK, TT = np.meshgrid(K_array,T_array)
-VV = np.empty(shape=(T_INT,K_INT))
+StrikesMeshgrid, TimesMeshgrid = np.meshgrid(StrikeArray, TimesArray)
+VolatilityMatrix = np.empty(shape=(TimesArrayIntervals, StrikesArrayIntervals))
 
 # Set the random seed
 np.random.seed(20000)
 
 # Fix the zero time
-t0 = time()
+InitialTime = time()
 
 # Compute the price matrix
-CC = func.price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL)
+PricesMatrix = func.generatePricesMatrix(TimesArray, StrikeArray, IntervalsNumber, SimulationNumbers,
+                               InitialAssetPrice, RiskFreeReturn, Volatility)
 
 # Find the implied volatility matrix
-for i in range(len(T_array)):
-    for j in range(len(K_array)):
-        VV[i,j] = func.find_imp_vol(CC[i,j], S=S0, K=K_array[j], T=T_array[i], r=R)
+for i in range(len(TimesArray)):
+    for j in range(len(StrikeArray)):
+        VolatilityMatrix[i,j] = func.findImpliedVolatility(PricesMatrix[i,j], InitialAssetPrice, StrikeArray[j],
+                                                           TimesArray[i], RiskFreeReturn, MaxIteration, Precision)
 
 # Total time
-print('All Done! Time: ', round(time()-t0, 2))
+print('All Done! Time: ', round(time()-InitialTime, 2))
 
 # Price Chart
-func.price_chart(KK, TT, CC)
+func.price_chart(StrikesMeshgrid, TimesMeshgrid, PricesMatrix)
 # Volatility Chart
-func.volatility_chart(KK, TT, VV)
+func.volatility_chart(StrikesMeshgrid, TimesMeshgrid, VolatilityMatrix)
