@@ -6,17 +6,21 @@ from time import time
 # Loading of settings
 config = configparser.ConfigParser()
 config.read('configuration.txt')
-RiskFreeReturn = float(config.get('settings', 'R'))
+RiskFreeReturn = float(config.get('settings', 'RiskFreeReturn'))
 Volatility = float(config.get('settings', 'Volatility'))
+SimulationNumbers = int(config.get('settings', 'SimulationNumbers'))
+IntervalsNumber = int(config.get('settings', 'IntervalsNumber'))
+MaxIteration = int(config.get('settings', 'MaxIteration'))
+Precision = float(config.get('settings', 'Precision'))
+RandomSeed = int(config.get('settings', 'RandomSeed'))
+
+
 InitialAssetPrice = 1
 MaxTime = 2
 MaxStrike = 1.5
 TimesArrayIntervals = 10
 StrikesArrayIntervals = 10
-SimulationNumbers = 10000
-IntervalsNumber = 10000
-MaxIteration = 10000
-Precision = 1.0e-8
+
 
 # Create the array for strike and time
 TimesArray = np.linspace(0.5, MaxTime, TimesArrayIntervals)
@@ -27,7 +31,7 @@ StrikesMeshgrid, TimesMeshgrid = np.meshgrid(StrikeArray, TimesArray)
 VolatilityMatrix = np.empty(shape=(TimesArrayIntervals, StrikesArrayIntervals))
 
 # Set the random seed
-np.random.seed(20000)
+np.random.seed(RandomSeed)
 
 # Fix the zero time
 InitialTime = time()
