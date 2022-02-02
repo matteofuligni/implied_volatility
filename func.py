@@ -1,7 +1,5 @@
 import numpy as np
 from scipy import stats
-import matplotlib.pyplot as plt
-from matplotlib import cm
 from time import time
 
 def sigma(AssetPrice, Volatility):
