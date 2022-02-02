@@ -2,37 +2,22 @@ import numpy as np
 from scipy import stats
 from datetime import datetime
 
-def sigma(AssetPrice, Volatility):
-    """ This method compute the value of the volatility in the case
-        it depends on the price.
-
-        Parameters
-            S : the assets price
-
-        Returns
-            The value of the volatility """
-    volatility = Volatility # A possible alternative could be: np.multiply(.2*np.maximum(1,2-S),S)
-    return volatility
-
 
 def computeSinglePrice(DeltaTime, Strike, IntervalsNumber, SimulationNumbers, InitialAssetPrice,
-                RiskFreeReturn, Volatility, AttualizationFactor, NormalMatrix):
+                       RiskFreeReturn, Volatility, AttualizationFactor, NormalMatrix):
     """
     """
-
-
-    S0 = InitialAssetPrice; R = RiskFreeReturn; VOL = Volatility
-    S = np.empty((SimulationNumbers)); S.fill(S0)
-    V = V = np.empty((SimulationNumbers)); V.fill(sigma(S0, VOL))
+    PriceArray = np.empty((SimulationNumbers)); PriceArray.fill(InitialAssetPrice)
+    VolatilityArray = np.empty((SimulationNumbers)); VolatilityArray.fill(Volatility)
     for j in range(IntervalsNumber):
         dw = np.sqrt(DeltaTime)*NormalMatrix[j,:]
-        V = sigma(S, VOL)
-        S = S*(1+R*DeltaTime)+np.multiply(V,dw)
-        Payoff = np.maximum(S-Strike,0).mean()
+        PriceArray = PriceArray*(1+RiskFreeReturn*DeltaTime)+np.multiply(VolatilityArray,dw)
+        Payoff = np.maximum(PriceArray-Strike,0).mean()
     return Payoff*AttualizationFactor
 
 def generatePricesMatrix(TimesArray, StrikeArray, IntervalsNumber,
-          SimulationNumbers, InitialAssetPrice, RiskFreeReturn, Volatility):
+                         SimulationNumbers, InitialAssetPrice, RiskFreeReturn,
+                         Volatility):
     """ This method implement the Monte Carlo and Euler methods to compute
         the expectation value of all the prices of a call option by varying
         the expiration time and the strike.
@@ -50,20 +35,19 @@ def generatePricesMatrix(TimesArray, StrikeArray, IntervalsNumber,
         Returns
             The CC matrix with all the computed prices
     """
-
-    S0 = InitialAssetPrice; R = RiskFreeReturn; Vol = Volatility;
     InitialTime = datetime.now()
-    CC = np.zeros(shape=(len(TimesArray),len(StrikeArray)))
+    PricesMatrix = np.zeros(shape=(len(TimesArray),len(StrikeArray)))
     NormalMatrix = stats.norm.rvs(size=(IntervalsNumber,SimulationNumbers))
     print('Normal Generated! Time: ', datetime.now()-InitialTime)
     for i in range(len(TimesArray)):
-        T = TimesArray[i]; DeltaTime = T/IntervalsNumber; AttualizationFactor=np.exp(-R*T)
+        T = TimesArray[i]; DeltaTime = T/IntervalsNumber; AttualizationFactor=np.exp(-RiskFreeReturn*T)
         for g in range(len(StrikeArray)):
-            CC[i,g] = computeSinglePrice(DeltaTime, StrikeArray[g], IntervalsNumber, SimulationNumbers,
-                                         S0, R, Vol, AttualizationFactor, NormalMatrix)
+            PricesMatrix[i,g] = computeSinglePrice(DeltaTime, StrikeArray[g], IntervalsNumber, SimulationNumbers,
+                                                   InitialAssetPrice, RiskFreeReturn, Volatility, AttualizationFactor,
+                                                   NormalMatrix)
             PassedTime = datetime.now() - InitialTime
-            print('Done : C[', i, ']','[',g,']', 'Time: ', PassedTime)
-    return CC
+            print('Done element in position [', i, ']','[',g,']', 'Time: ', PassedTime)
+    return PricesMatrix
 
 
 def blackScholesCallPrice(InitialAssetPrice, Strike, Time, RiskFreeReturn, Volatility):
@@ -84,9 +68,10 @@ def blackScholesCallPrice(InitialAssetPrice, Strike, Time, RiskFreeReturn, Volat
     S0 = InitialAssetPrice; R = RiskFreeReturn; V = Volatility
     CallPrice = 0
     with np.errstate(divide='ignore', invalid='ignore'):
-        d1 = np.nan_to_num(np.divide((np.log(S0/Strike) + (R + 0.5*V**2)*Time),(V*np.sqrt(Time))))
-        d2 = d1 - V * np.sqrt(Time)
-        CallPrice = S0 * stats.norm.cdf(d1) - np.exp(-R * Time) * Strike * stats.norm.cdf(d2)
+        d1 = np.nan_to_num(np.divide((np.log(InitialAssetPrice/Strike) +
+             (RiskFreeReturn + 0.5*Volatility**2)*Time),(Volatility*np.sqrt(Time))))
+        d2 = d1 - Volatility * np.sqrt(Time)
+        CallPrice = InitialAssetPrice * stats.norm.cdf(d1) - np.exp(-RiskFreeReturn * Time) * Strike * stats.norm.cdf(d2)
         if CallPrice == np.nan:
             return 0.0
     return CallPrice
@@ -108,11 +93,11 @@ def blackScholesVegaGreek(InitialAssetPrice, Strike, Time, RiskFreeReturn, Volat
         Returns
             The value of the derivative
     """
-    S0 = InitialAssetPrice; R = RiskFreeReturn; V = Volatility
     VegaGreek = 0
     with np.errstate(divide='ignore', invalid='ignore'):
-        d1 = np.divide((np.log(S0 / Strike) + (R + 0.5 * V ** 2) * Time),(V * np.sqrt(Time)))
-        VegaGreek = S0 * stats.norm.pdf(d1) * np.sqrt(Time)
+        d1 = np.divide((np.log(InitialAssetPrice / Strike) +
+            (RiskFreeReturn + 0.5 * Volatility ** 2) * Time),(Volatility * np.sqrt(Time)))
+        VegaGreek = InitialAssetPrice * stats.norm.pdf(d1) * np.sqrt(Time)
     return VegaGreek
 
 
@@ -131,11 +116,10 @@ def findImpliedVolatility(TargetValue, InitialAssetPrice, Strike, Time, RiskFree
         Returns
             The value of the implied volatility for that time and strike
         """
-    S0 = InitialAssetPrice; R = RiskFreeReturn
     ImpliedVolatility = 0.3
     for i in range(0, MaxIteration):
-        CallPrice = blackScholesCallPrice(S0, Strike, Time, R, ImpliedVolatility)
-        VegaGreek = blackScholesVegaGreek(S0, Strike, Time, R, ImpliedVolatility)
+        CallPrice = blackScholesCallPrice(InitialAssetPrice, Strike, Time, RiskFreeReturn, ImpliedVolatility)
+        VegaGreek = blackScholesVegaGreek(InitialAssetPrice, Strike, Time, RiskFreeReturn, ImpliedVolatility)
         Difference = TargetValue - CallPrice
         if (abs(Difference) < Precision):
             return np.float64(ImpliedVolatility)
