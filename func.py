@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from matplotlib import cm
 from time import time
 
-def sigma(S, VOL):
+def sigma(AssetPrice, Volatility):
     """ This method compute the value of the volatility in the case
         it depends on the price.
 
@@ -13,10 +13,11 @@ def sigma(S, VOL):
 
         Returns
             The value of the volatility """
-    vol = VOL # A possible alternative could be: np.multiply(.2*np.maximum(1,2-S),S)
-    return vol
+    volatility = Volatility # A possible alternative could be: np.multiply(.2*np.maximum(1,2-S),S)
+    return volatility
 
-def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL):
+def pricesMatrix(TimesArray, StrikeArray, IntervalsNumber,
+          SimulationNumbers, InitialAssetPrice, RiskFreeReturn, Volatility):
     """ This method implement the Monte Carlo and Euler methods to compute
         the expectation value of all the prices of a call option by varying
         the expiration time and the strike.
@@ -34,30 +35,31 @@ def price(T_array, K_array, N_INTER, N_SIM, S0, R, VOL):
         Returns
             The CC matrix with all the computed prices
     """
+
+    S0 = InitialAssetPrice; R = RiskFreeReturn; VOL = Volatility;
     t0 = time()
-    CC = np.zeros(shape=(len(T_array),len(K_array)))
-    norm = stats.norm.rvs(size=(N_INTER,N_SIM))
+    CC = np.zeros(shape=(len(TimesArray),len(StrikeArray)))
+    norm = stats.norm.rvs(size=(IntervalsNumber,SimulationNumbers))
     print('Normal Generated! Time: ', round(time()-t0, 2))
     r=R; sim=N_SIM; inter=N_INTER;
-    for i in range(len(T_array)):
-        T = T_array[i]; dt = T/inter; att=np.exp(-r*T)
-        for g in range(len(K_array)):
+    for i in range(len(TimesArray)):
+        T = T_array[i]; dt = T/IntervalsNumber; AttualizationFactor=np.exp(-r*T)
+        for g in range(len(StrikeArray)):
             k=K_array[g]
-            S = np.empty((sim)); S.fill(S0)
-            V = np.empty((sim)); V.fill(sigma(S0, VOL))
-            for j in range(inter):
+            S = np.empty((SimulationNumbers)); S.fill(S0)
+            V = np.empty((SimulationNumbers)); V.fill(sigma(S0, VOL))
+            for j in range(IntervalsNumber):
                 dw = np.sqrt(dt)*norm[j,:]
                 V = sigma(S, VOL) # The vol can be set as a func of the underlying asset
                 S = S*(1+r*dt)+np.multiply(V,dw)
-            payoff = np.maximum(S-k,0).mean()
-            CC[i,g] = payoff*att
+            Payoff = np.maximum(S-k,0).mean()
+            CC[i,g] = Payoff*AttualizationFactor
             tnp2 = time() - t0
             print('Done : C[', i, ']','[',g,']', 'Time: ', round(tnp2,2))
-    print(CC)
     return CC
 
 
-def bs_call(S, K, T, r, vol):
+def blackScholesCallPrice(InitialAssetPrice, Strike, Time, RiskFreeReturn, Volatility):
     """ This method implements the Black-Scholes formula
         to compute the price of a call option given the strike,
         the expiration time, the risk-free return and the volatility
@@ -72,17 +74,18 @@ def bs_call(S, K, T, r, vol):
         Returns
             The price of the call option
     """
-    out = 0
+    S0 = InitialAssetPrice; R = RiskFreeReturn; V = Volatility
+    CallPrice = 0
     with np.errstate(divide='ignore', invalid='ignore'):
-        d1 = np.nan_to_num(np.divide((np.log(S/K) + (r + 0.5*vol**2)*T),(vol*np.sqrt(T))))
-        d2 = d1 - vol * np.sqrt(T)
-        out = S * stats.norm.cdf(d1) - np.exp(-r * T) * K * stats.norm.cdf(d2)
+        d1 = np.nan_to_num(np.divide((np.log(S0/Strike) + (R + 0.5*V**2)*Time),(V*np.sqrt(Time))))
+        d2 = d1 - V * np.sqrt(Time)
+        CallPrice = S0 * stats.norm.cdf(d1) - np.exp(-R * Time) * Strike * stats.norm.cdf(d2)
         if out == np.nan:
             return 0.0
-    return out
+    return CallPrice
 
 
-def bs_vega(S, K, T, r, sigma):
+def blackScholesVegaGreek(InitialAssetPrice, Strike, Time, RiskFreeReturn, Volatility):
     """ This method implements the formula to compute the greek
         vega, that is the derivative of the Black-Scholes
         formula with respect to the price, utilized in the find_vol
@@ -98,14 +101,15 @@ def bs_vega(S, K, T, r, sigma):
         Returns
             The value of the derivative
     """
-    out = 0
+    S0 = InitialAssetPrice; R = RiskFreeReturn; V = Volatility
+    VegaGreek = 0
     with np.errstate(divide='ignore', invalid='ignore'):
-        d1 = np.divide((np.log(S / K) + (r + 0.5 * sigma ** 2) * T),(sigma * np.sqrt(T)))
-        out = S * stats.norm.pdf(d1) * np.sqrt(T)
-    return out
+        d1 = np.divide((np.log(S0 / Strike) + (R + 0.5 * V ** 2) * Time),(V * np.sqrt(Time)))
+        VegaGreek = S0 * stats.norm.pdf(d1) * np.sqrt(Time)
+    return VegaGreek
 
 
-def find_imp_vol(target_value, S, K, T, r):
+def findImpliedVolatility(TargetValue, InitialAssetPrice, Strike, Time, RiskFreeReturn):
     """ This method implements the Newton-Raphson method to
         compute the implied volatility for the input price.
 
@@ -120,22 +124,26 @@ def find_imp_vol(target_value, S, K, T, r):
         Returns
             The value of the implied volatility for that time and strike
         """
+    S0 = InitialAssetPrice; R = RiskFreeReturn
     MAX_ITERATIONS = 100000
     PRECISION = 1.0e-8
-    _sigma = 0.3
+    ImpliedVolatility = 0.3
     for i in range(0, MAX_ITERATIONS):
-        price = bs_call(S, K, T, r, _sigma)
-        vega = bs_vega(S, K, T, r, _sigma)
-        diff = target_value - price
-        if (abs(diff) < PRECISION):
-            return np.float64(_sigma)
-        _sigma = _sigma + np.divide(diff,vega)
+        CallPrice = blackScholesCallPrice(S0, Strike, Time, R, ImpliedVolatility)
+        VegaGreek = blackScholesVegaGreek(S0, Strike, Time, R, ImpliedVolatility)
+        Difference = TargetValue - CallPrice
+        if (abs(Difference) < PRECISION):
+            return np.float64(ImpliedVolatility)
+        ImpliedVolatility = ImpliedVolatility + np.divide(Difference,VegaGreek)
+
+    ##### Add Warning ####
     print('Sigma not found')
-    return _sigma
+
+    return ImpliedVolatility
 
 
 
-def price_chart(KK, TT, CC):
+def price_chart(StikesMeshgrid, TimeMeshgrid, PricesMatrix):
     """ This method plot the price chart.
 
         Parameters
@@ -143,6 +151,7 @@ def price_chart(KK, TT, CC):
             TT : the time meshgrid
             CC : the price matrix
         """
+    KK = StikesMeshgrid; TT = TimeMeshgrid; CC = PricesMatrix
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.plot_surface(KK, TT, CC, facecolors=cm.jet(CC), lw=0)
@@ -157,7 +166,7 @@ def price_chart(KK, TT, CC):
     plt.savefig('Price.png', dpi = 300)
     plt.show()
 
-def volatility_chart(KK, TT, VV):
+def volatility_chart(StikesMeshgrid, TimeMeshgrid, VolatilityMatrix):
     """ This method plot the implied volatility chart.
 
         Parameters
@@ -165,6 +174,7 @@ def volatility_chart(KK, TT, VV):
             TT : the time meshgrid
             VV : the implied volatility matrix
         """
+    KK = StikesMeshgrid; TT = TimeMeshgrid; VV = VolatilityMatrix
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     ax.plot_surface(KK, TT, VV, facecolors=cm.jet(VV), lw=0)
