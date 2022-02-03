@@ -1,5 +1,6 @@
-import configparser
 import numpy as np
+import pandas as pd
+import configparser
 import sys
 import func as f
 import graph as g
@@ -19,6 +20,12 @@ IntervalsNumber = int(config.get('settings', 'IntervalsNumber'))
 MaxIteration = int(config.get('settings', 'MaxIteration'))
 Precision = float(config.get('settings', 'Precision'))
 RandomSeed = int(config.get('settings', 'RandomSeed'))
+
+#Loading names and path
+PriceMatrixPath = config.get('paths', 'PricesMatrix')
+VolatilityMatrixPath = config.get('paths', 'VolatilityMatrix')
+PricesChartPath = config.get('paths', 'PriceChart')
+VolatilityChartPath = config.get('paths', 'VolatilityChart')
 
 
 InitialAssetPrice = 1
@@ -55,7 +62,12 @@ for i in range(len(TimesArray)):
 # Total time
 print('All Done! Time: ', dt.now()-InitialTime)
 
+#Price Matrix
+pd.DataFrame(PricesMatrix, index=TimesArray, columns=StrikeArray).to_csv(PriceMatrixPath)
+#Volatility Matrix
+pd.DataFrame(VolatilityMatrix, index=TimesArray, columns=StrikeArray).to_csv(VolatilityMatrixPath)
+
 # Price Chart
-g.generatePriceChart(StrikesMeshgrid, TimesMeshgrid, PricesMatrix)
+g.generatePriceChart(StrikesMeshgrid, TimesMeshgrid, PricesMatrix, PricesChartPath)
 # Volatility Chart
-g.generateImpliedVolatilityChart(StrikesMeshgrid, TimesMeshgrid, VolatilityMatrix)
+g.generateImpliedVolatilityChart(StrikesMeshgrid, TimesMeshgrid, VolatilityMatrix, VolatilityChartPath)
