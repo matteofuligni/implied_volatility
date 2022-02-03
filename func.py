@@ -1,5 +1,6 @@
 import numpy as np
 from scipy import stats
+import warnings
 from datetime import datetime
 
 
@@ -146,8 +147,5 @@ def findImpliedVolatility(TargetValue, InitialAssetPrice, Strike, Time, RiskFree
         if (abs(Difference) < Precision):
             return np.float64(ImpliedVolatility)
         ImpliedVolatility = ImpliedVolatility + np.divide(Difference,VegaGreek)
-
-    ##### Add Warning ####
-    print('Sigma not found')
-
+    warnings.warn("Max Number of Iterations Reached")
     return ImpliedVolatility
