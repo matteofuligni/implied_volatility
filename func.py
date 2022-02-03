@@ -5,7 +5,23 @@ from datetime import datetime
 
 def computeSinglePrice(DeltaTime, Strike, IntervalsNumber, SimulationNumbers, InitialAssetPrice,
                        RiskFreeReturn, Volatility, AttualizationFactor, NormalMatrix):
-    """
+    """ Compute a single Call Price
+        This method implement the Monte Carlo and Euler methods to compute
+        the expectation value of the price of a call option given the input parameters
+
+        Parameters
+            DeltaTime : the amplitude of a each time intervals
+            Strike : the value of the strike for the Call
+            IntervalsNumber : the number of intervals for the Euler method
+            SimulationNumbers : the number of simulation for the Montecarlo method
+            InitialAssetPrice : the initial price of the underlying asset
+            RiskFreeReturn : the risk-free return refered to the bank account
+            Volatility : the volatility of the underlying asset
+            AttualizationFactor : the factor that has to applied to the payoff to obtain the price
+            NormalMatrix : a matrix of normal obsevation with dimensions IntervalsNumber x SimulationNumbers
+
+        Returns
+            The expectation value of the Call price given the parameters
     """
     PriceArray = np.empty((SimulationNumbers)); PriceArray.fill(InitialAssetPrice)
     VolatilityArray = np.empty((SimulationNumbers)); VolatilityArray.fill(Volatility)
@@ -18,22 +34,24 @@ def computeSinglePrice(DeltaTime, Strike, IntervalsNumber, SimulationNumbers, In
 def generatePricesMatrix(TimesArray, StrikeArray, IntervalsNumber,
                          SimulationNumbers, InitialAssetPrice, RiskFreeReturn,
                          Volatility):
-    """ This method implement the Monte Carlo and Euler methods to compute
+    """ Call prices matrix
+        This method implement the Monte Carlo and Euler methods to compute
         the expectation value of all the prices of a call option by varying
         the expiration time and the strike.
 
         Parameters
-            T_array : an array with all the possible expiration times
-            K_array : an array with all the possible strike
-            N_INTER : the number of interval in which the trajectory
+            TimesArray : an array with all the possible expiration times
+            StrikeArray : an array with all the possible strike
+            IntervalsNumber : the number of interval in which the trajectory
                       of the underlying asset has been divided to
                       implement the Euler scheme
-            S0 : the initial value of the asset
-            R : the value of the risk-free return
-            VOL : the value of the fixed volatility of the asset
+            SimulationNumbers : the number of montecarlo simulations
+            InitialAssetPrice : the initial value of the asset
+            RiskFreeReturn : the value of the risk-free return
+            Volatility : the value of the fixed volatility of the asset
 
         Returns
-            The CC matrix with all the computed prices
+            The PricesMatrix matrix with all the computed prices
     """
     InitialTime = datetime.now()
     PricesMatrix = np.zeros(shape=(len(TimesArray),len(StrikeArray)))
@@ -51,21 +69,21 @@ def generatePricesMatrix(TimesArray, StrikeArray, IntervalsNumber,
 
 
 def blackScholesCallPrice(InitialAssetPrice, Strike, Time, RiskFreeReturn, Volatility):
-    """ This method implements the Black-Scholes formula
+    """ Call price Blcak-Scholes
+        This method implements the Black-Scholes formula
         to compute the price of a call option given the strike,
         the expiration time, the risk-free return and the volatility
 
         Parameters
-            S : the initial value of the assets
-            K : the strike of the option
-            T : the option expiration time
-            r : the risk-free return
-            vol : the volatility of the asset
+            InitialAssetPrice : the initial value of the assets
+            Strike : the strike of the option
+            Time : the option expiration time
+            RiskFreeReturn : the risk-free return
+            Volatility : the volatility of the asset
 
         Returns
             The price of the call option
     """
-    S0 = InitialAssetPrice; R = RiskFreeReturn; V = Volatility
     CallPrice = 0
     with np.errstate(divide='ignore', invalid='ignore'):
         d1 = np.nan_to_num(np.divide((np.log(InitialAssetPrice/Strike) +
@@ -78,20 +96,21 @@ def blackScholesCallPrice(InitialAssetPrice, Strike, Time, RiskFreeReturn, Volat
 
 
 def blackScholesVegaGreek(InitialAssetPrice, Strike, Time, RiskFreeReturn, Volatility):
-    """ This method implements the formula to compute the greek
+    """ Compute value Vega greek
+        This method implements the formula to compute the greek
         vega, that is the derivative of the Black-Scholes
         formula with respect to the price, utilized in the find_vol
         function.
 
         Parameters
-            S : the initial value of the assets
-            K : the strike of the option
-            T : the option expiration time
-            r : the risk-free return
-            sigma : the volatility of the asset
+            InitialAssetPrice : the initial value of the assets
+            Strike : the strike of the option
+            Time : the option expiration time
+            RiskFreeReturn : the risk-free return
+            Volatility : the volatility of the asset
 
         Returns
-            The value of the derivative
+            The value of the Vega green derivative
     """
     VegaGreek = 0
     with np.errstate(divide='ignore', invalid='ignore'):
@@ -102,16 +121,19 @@ def blackScholesVegaGreek(InitialAssetPrice, Strike, Time, RiskFreeReturn, Volat
 
 
 def findImpliedVolatility(TargetValue, InitialAssetPrice, Strike, Time, RiskFreeReturn, MaxIteration, Precision):
-    """ This method implements the Newton-Raphson method to
+    """ Implied volatility Newton-Raphson
+        This method implements the Newton-Raphson method to
         compute the implied volatility for the input price.
 
         Parameters
-            target_value : the price of which we want to compute
+            TargetValue : the price of which we want to compute
                            the Black-Scholes volatility
-            S : the initial value of the assets
-            K : the strike of the option
-            T : the option expiration time
-            r : the risk-free return
+            InitialAssetPrice : the initial value of the assets
+            Strike : the strike of the option
+            Time : the option expiration time
+            RiskFreeReturn : the risk-free return
+            MaxIteration : max number of iterations
+            Precision : the precision respect to the target value
 
         Returns
             The value of the implied volatility for that time and strike
