@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from matplotlib import cm
 
-def generatePriceChart(StikesMeshgrid, TimeMeshgrid, PricesMatrix):
+def generatePriceChart(StikesMeshgrid, TimeMeshgrid, PricesMatrix, PricesChartPath):
     """ This method plot the price chart.
 
         Parameters
@@ -20,10 +20,10 @@ def generatePriceChart(StikesMeshgrid, TimeMeshgrid, PricesMatrix):
     ax.set_zlabel('Price', fontsize='14')
     ax.tick_params(axis='both', which='major', labelsize=10)
     plt.title('Price Chart', fontsize='24')
-    plt.savefig('Price.png', dpi = 300)
+    plt.savefig(PricesChartPath, dpi = 300)
     plt.show()
 
-def generateImpliedVolatilityChart(StikesMeshgrid, TimeMeshgrid, VolatilityMatrix):
+def generateImpliedVolatilityChart(StikesMeshgrid, TimeMeshgrid, VolatilityMatrix, VolatilityChartPath):
     """ This method plot the implied volatility chart.
 
         Parameters
@@ -42,5 +42,5 @@ def generateImpliedVolatilityChart(StikesMeshgrid, TimeMeshgrid, VolatilityMatri
     ax.set_zlabel('Vol', fontsize='14')
     ax.tick_params(axis='both', which='major', labelsize=10)
     plt.title(' Volatility Chart', fontsize='24')
-    plt.savefig('Vol.png', dpi = 300)
+    plt.savefig(VolatilityChartPath, dpi = 300)
     plt.show()
