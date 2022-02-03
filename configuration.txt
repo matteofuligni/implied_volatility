@@ -10,5 +10,5 @@ RandomSeed = 20000
 [paths]
 PricesMatrix: ./PricesMatrix.csv
 VolatilityMatrix: ./VolatilityMatrix.csv
-PriceChart: ./PriceChart.png
+PricesChart: ./PriceChart.png
 VolatilityChart: ./VolatilityChart.png
