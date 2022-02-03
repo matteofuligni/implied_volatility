@@ -22,9 +22,9 @@ Precision = float(config.get('settings', 'Precision'))
 RandomSeed = int(config.get('settings', 'RandomSeed'))
 
 #Loading names and path
-PriceMatrixPath = config.get('paths', 'PricesMatrix')
+PricesMatrixPath = config.get('paths', 'PricesMatrix')
 VolatilityMatrixPath = config.get('paths', 'VolatilityMatrix')
-PricesChartPath = config.get('paths', 'PriceChart')
+PricesChartPath = config.get('paths', 'PricesChart')
 VolatilityChartPath = config.get('paths', 'VolatilityChart')
 
 
@@ -63,7 +63,7 @@ for i in range(len(TimesArray)):
 print('All Done! Time: ', dt.now()-InitialTime)
 
 #Price Matrix
-pd.DataFrame(PricesMatrix, index=TimesArray, columns=StrikeArray).to_csv(PriceMatrixPath)
+pd.DataFrame(PricesMatrix, index=TimesArray, columns=StrikeArray).to_csv(PricesMatrixPath)
 #Volatility Matrix
 pd.DataFrame(VolatilityMatrix, index=TimesArray, columns=StrikeArray).to_csv(VolatilityMatrixPath)
 
