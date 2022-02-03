@@ -6,3 +6,9 @@ IntervalsNumber = 10000
 MaxIteration = 10000
 Precision = 1.0e-8
 RandomSeed = 20000
+
+[paths]
+PricesMatrix: ./PricesMatrix.csv
+VolatilityMatrix: ./VolatilityMatrix.csv
+PriceChart: ./PriceChart.png
+VolatilityChart: ./VolatilityChart.png
