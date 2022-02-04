@@ -8,6 +8,7 @@ def generatePriceChart(StikesMeshgrid, TimeMeshgrid, PricesMatrix, PricesChartPa
             StikesMeshgrid : the strike meshgrid
             TimeMeshgrid : the time meshgrid
             PricesMatrix : the price matrix
+            PricesChartPath : the path to save the price chart
         """
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
@@ -21,7 +22,6 @@ def generatePriceChart(StikesMeshgrid, TimeMeshgrid, PricesMatrix, PricesChartPa
     ax.tick_params(axis='both', which='major', labelsize=10)
     plt.title('Price Chart', fontsize='24')
     plt.savefig(PricesChartPath, dpi = 300)
-    plt.show()
 
 def generateImpliedVolatilityChart(StikesMeshgrid, TimeMeshgrid, VolatilityMatrix, VolatilityChartPath):
     """ This method plot the implied volatility chart.
@@ -30,6 +30,7 @@ def generateImpliedVolatilityChart(StikesMeshgrid, TimeMeshgrid, VolatilityMatri
             StikesMeshgrid : the strike meshgrid
             TimeMeshgrid : the time meshgrid
             VolatilityMatrix : the implied volatility matrix
+            VolatilityChartPath : the path to save the volatility chart
         """
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
@@ -43,4 +44,3 @@ def generateImpliedVolatilityChart(StikesMeshgrid, TimeMeshgrid, VolatilityMatri
     ax.tick_params(axis='both', which='major', labelsize=10)
     plt.title(' Volatility Chart', fontsize='24')
     plt.savefig(VolatilityChartPath, dpi = 300)
-    plt.show()
