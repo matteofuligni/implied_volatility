@@ -91,7 +91,7 @@ def blackScholesCallPrice(InitialAssetPrice, Strike, Time, RiskFreeReturn, Volat
              (RiskFreeReturn + 0.5*Volatility**2)*Time),(Volatility*np.sqrt(Time))))
         d2 = d1 - Volatility * np.sqrt(Time)
         CallPrice = InitialAssetPrice * stats.norm.cdf(d1) - np.exp(-RiskFreeReturn * Time) * Strike * stats.norm.cdf(d2)
-        if CallPrice == np.nan:
+        if np.isnan(CallPrice):
             return 0.0
     return CallPrice
 
@@ -111,7 +111,7 @@ def blackScholesVegaGreek(InitialAssetPrice, Strike, Time, RiskFreeReturn, Volat
             Volatility : the volatility of the asset
 
         Returns
-            The value of the Vega green derivative
+            The value of the Vega greek derivative
     """
     VegaGreek = 0
     with np.errstate(divide='ignore', invalid='ignore'):
