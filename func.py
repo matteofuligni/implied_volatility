@@ -87,7 +87,7 @@ def blackScholesCallPrice(InitialAssetPrice, Strike, Time, RiskFreeReturn, Volat
     """
     CallPrice = 0
     with np.errstate(divide='ignore', invalid='ignore'):
-        d1 = np.nan_to_num(np.divide((np.log(InitialAssetPrice/Strike) +
+        d1 = np.nan_to_num(np.divide((np.log(np.divide(InitialAssetPrice,Strike)) +
              (RiskFreeReturn + 0.5*Volatility**2)*Time),(Volatility*np.sqrt(Time))))
         d2 = d1 - Volatility * np.sqrt(Time)
         CallPrice = InitialAssetPrice * stats.norm.cdf(d1) - np.exp(-RiskFreeReturn * Time) * Strike * stats.norm.cdf(d2)
