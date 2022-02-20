@@ -52,30 +52,34 @@ In this project the algorithm return the best estimation for the implied volatil
 ## Structure of the project
 These are the steps in order to run the simulation:
 
-1. First, the user has to choose the personal settings that want to implement in the model through the configuration.txt file. The possible setting are:
+1. First, the user has to create the personal file in which are stored all the settings to run the script. Make sure to follow the same structure as the configuration.txt file to store your settings.
+
+Available settings are:
      - R, the risk-free return (usually small positive < 0.1)
      - VOL, the volatility of the asset (usually 0 < Vol < 1)
+     - SimulationNumbers, number of Monte Carlo simulation
+     - IntervalsNumber, number of intervals in Euler simulation
+     - MaxIteration, number of max iterations to find the implied volatility
+     - Precision, the precision with which the volatility is found
+     - RandomSeed, the random seed
 
-2. There are also other parameters in model that can be defied in some ways "standard", that can be set at will. I suggest to leave them as they are, because are in the optimal way to analyze this type of implied volatility problem. They are:
-     - S0 = 1, the initial price of the asset
-     - TIME = 2, the longest time for the simulation of the asset in years
-     - STRIKE = 1.5, the biggest value of strike for the simulation of the asset
-     - t_int = 10, the number of intervals of the expiration time
-     - k_int = 10, the number of different strikes in the range  
-     - N_SIM = 10000, the number of the simulations of the underlying asset
-     - N_INTER = 10000, the number in which the time will be divided for the Euler scheme simulation for the asset
+Other settings include the paths where to save the generated data and the graph:
+     - PricesMatrixPath, path to save the matrix of prices
+     - VolatilityMatrixPath, path to save the matrix of implied volatility
+     - PricesChartPath, path to save the prices chart
+     - VolatilityChartPath, path to save the implied volatility chart
 
-3. Then, the user has to launch the vol.py file, that import its parameters from the configuration.txt file.
+3. Then, the user has to launch the vol.py file. In order to load your personal settings file, when you run the script you have to specify the path and the name in CLI like: "python3 vol.py filename.txt".
+If no valid fail is provided, the default configuration.txt file will be loaded.
 
-4. The output of the script are the surface of the generated prices and the implied volatility surface that will be saved as .png in the directory of the script.
+4. The output of the script are the generated prices and the implied volatility values and surfaces that will be respectively saved as csv and as .png in the specified path in the configuration file.
 
 
 The project are divided in different blocks:
 - The configuration.txt file contains all the settable parameters for the model
 - The func.py file contains all the defined functions used in the simulations
-- The vol.py file contains the main part of the project in which all the defined function are recalled and in which the simulations are done
-
-The script can be easily adapt to particular definition of volatility of the underlying asset, and the parameters can be set at will in the configuration.txt file.
+- The graph.py file contains the functions to plot prices and implied volatility
+- The vol.py file contains the main part of the project in which all the defined function are recalled and in which the simulations are done.
 
 Here are reported two sample image for the price and implied volatility surface.
 
