@@ -69,9 +69,10 @@ Other settings include the paths where to save the generated data and the graph:
      - PricesChartPath, path to save the prices chart
      - VolatilityChartPath, path to save the implied volatility chart
 
-3. Then, the user has to launch the vol.py file. In order to load your personal settings file, when you run the script you have to specify the path and the name in CLI. If no valid fail is provided, the default configuration.txt file will be loaded.
+3. Then, the user has to launch the vol.py file. In order to load your personal settings file, when you run the script you have to specify the path and the name in CLI like: "python3 vol.py filename.txt".
+If no valid fail is provided, the default configuration.txt file will be loaded.
 
-4. The output of the script are the surface of the generated prices and the implied volatility surface that will be saved as .png in the directory of the script.
+4. The output of the script are the generated prices and the implied volatility values and surfaces that will be respectively saved as csv and as .png in the specified path in the configuration file.
 
 
 The project are divided in different blocks:
