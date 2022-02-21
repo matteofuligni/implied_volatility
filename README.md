@@ -55,19 +55,19 @@ These are the steps in order to run the simulation:
 1. First, the user has to create the personal file in which are stored all the settings to run the script. Make sure to follow the same structure as the configuration.txt file to store your settings.
 
 Available settings are:
-     - R, the risk-free return (usually small positive < 0.1)
-     - VOL, the volatility of the asset (usually 0 < Vol < 1)
-     - SimulationNumbers, number of Monte Carlo simulation
-     - IntervalsNumber, number of intervals in Euler simulation
-     - MaxIteration, number of max iterations to find the implied volatility
-     - Precision, the precision with which the volatility is found
-     - RandomSeed, the random seed
+- R, the risk-free return (usually small positive < 0.1)
+- VOL, the volatility of the asset (usually 0 < Vol < 1)
+- SimulationNumbers, number of Monte Carlo simulation
+- IntervalsNumber, number of intervals in Euler simulation
+- MaxIteration, number of max iterations to find the implied volatility
+- Precision, the precision with which the volatility is found
+- RandomSeed, the random seed
 
 Other settings include the paths where to save the generated data and the graph:
-     - PricesMatrixPath, path to save the matrix of prices
-     - VolatilityMatrixPath, path to save the matrix of implied volatility
-     - PricesChartPath, path to save the prices chart
-     - VolatilityChartPath, path to save the implied volatility chart
+- PricesMatrixPath, path to save the matrix of prices
+- VolatilityMatrixPath, path to save the matrix of implied volatility
+- PricesChartPath, path to save the prices chart
+- VolatilityChartPath, path to save the implied volatility chart
 
 3. Then, the user has to launch the vol.py file. In order to load your personal settings file, when you run the script you have to specify the path and the name in CLI like: "python3 vol.py filename.txt".
 If no valid fail is provided, the default configuration.txt file will be loaded.
